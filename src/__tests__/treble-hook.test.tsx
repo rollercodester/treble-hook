@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import 'react'
-import usePubSub from '../'
+import { usePubSub } from '../'
 
 const STATE_VALUE_INDEX = 0
 const PUBLISH_INDEX = 1

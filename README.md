@@ -25,7 +25,7 @@ Contrived sign-in component and a component that displays active user (signed-in
 
 ```tsx
 import React, { ChangeEvent, useState } from 'react'
-import usePubSub from 'treble-hook'
+import { usePubSub } from 'treble-hook'
 
 const ACTIVE_USER_TOPIC = 'active-user'
 
@@ -115,7 +115,7 @@ Coming soon.
 
 ## Authors
 
-Awesome UX Dev team at [Igneous Systems](https://www.igneous.io).
+The awesome engineering team at [Igneous Systems](https://www.igneous.io). Speaking of, we're always on the lookout for passionate engineers; visit [Igneous culture and careers](https://www.igneous.io/culture-and-careers) to learn more.
 
 ## Issues
 

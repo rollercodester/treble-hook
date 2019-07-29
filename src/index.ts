@@ -1,4 +1,4 @@
-import { SetStateAction, useEffect, useState } from 'react'
+import React, { SetStateAction, useEffect, useState } from 'react'
 
 const HOOK_PUBLISH_INDEX = 1
 
@@ -162,7 +162,7 @@ function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
 
 }
 
-export default usePubSub
+export { usePubSub }
 
 
 //
