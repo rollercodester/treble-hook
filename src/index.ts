@@ -58,7 +58,7 @@ const publish = <T>(topic: string) => (newState: T) => {
 }
 
 /**
- * Sets up the unsubscribe function that is returned for a specific topi subscriber.
+ * Sets up the unsubscribe function that is returned for a specific topic subscriber.
  */
 const unsubscribe: InternalUnsubscribe = (topic: string, subscriptionId?: string) => () => {
 
