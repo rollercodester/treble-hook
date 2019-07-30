@@ -1,0 +1,46 @@
+{
+  "todo-tree.customHighlight": {
+    "FEATURE_FLAG": {
+      "background": "cyan",
+      "foreground": "black",
+      "iconColour": "cyan"
+    },
+    "FIXME": {
+      "background": "red",
+      "foreground": "white",
+      "iconColour": "red"
+    },
+    "FUTURE": {
+      "background": "#3f5a89",
+      "foreground": "white",
+      "iconColour": "#3f5a89"
+    }
+  },
+  "todo-tree.defaultHighlight": {
+    "background": "yellow",
+    "foreground": "black",
+    "iconColour": "yellow",
+    "type": "tag"
+  },
+  "todo-tree.includeGlobs": [
+    "**/src/**"
+  ],
+  "todo-tree.excludeGlobs": [
+    "**/*.md"
+  ],
+  "todo-tree.tags": [
+    "TODO:",
+    "FIXME:",
+    "FEATURE_FLAG:",
+    "FUTURE:"
+  ],
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/build/**": true,
+    "**/lib/**": true
+  },
+  "npm.packageManager": "yarn",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true
+}
