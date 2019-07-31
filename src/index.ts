@@ -75,7 +75,7 @@ const unsubscribe: InternalUnsubscribe = (topic: string, subscriptionId?: string
 /**
  * Hook that enables pub-sub functionality across ReactJS function components.
  */
-function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
+export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
 
   if (arguments.length !== 2) {
 
@@ -161,8 +161,6 @@ function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
   return [state || defaultState, publish<T>(topic), unsubscribe(topic, subscriptionId)]
 
 }
-
-export { usePubSub }
 
 
 //
