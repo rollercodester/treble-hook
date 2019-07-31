@@ -1,9 +1,19 @@
-<div align="center">
-  <h1>treble-hook</h1>
+
+<div>
+  <img height="180" alt='treble-hook' src='https://raw.githubusercontent.com/rollercodester/treble-hook/master/doc-assets/treble-hook-3.png'/>
   <p>
-    Super easy way to get "hooked" on subscribe-and-publish in React with no dependencies and no cruft.
+    <i>Super easy way to get "hooked" on subscribe-and-publish in React with no dependencies and no cruft.</i>
   </p>
+  <br />
+  <div style="float:left;">
+    <a href="https://www.npmjs.com/package/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/v/treble-hook.svg?style=flat" alt="version"></a>
+    <a href="https://travis-ci.org/rollercodester/treble-hook" rel="nofollow"><img src="https://img.shields.io/travis/rollercodester/treble-hook.svg?style=flat" alt="Build Status"></a>
+    <a href="http://www.npmtrends.com/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/dm/treble-hook.svg?style=flat" alt="downloads"></a>
+    <a href="https://github.com/igneous-systems/treble-hook/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/npm/l/treble-hook.svg?style=flat" alt="MIT License"></a>
+  </div>
 </div>
+
+<div style="float:none;">&nbsp;</div>
 
 ## WARNING
 This is still pre-release, so consider it beta, meaning there will likely be changes; however, we don't envision breaking interface.
@@ -95,6 +105,12 @@ All of the pre-Hooks-era options are certainly still available:
 
 But are any of these really well suited for a complex, real-world, single-page Web application that is built from the ground-up using hooks? The authors of this library believe that the answer is no, with the possible exception of the Context API; but it just feels yucky to use context for application state that isn't necessarily global.
 
+### Redux + Hooks
+
+Already have a lot of Redux code but you're really wanting to use React hooks for cross-cutting state going forward? Potential good news for you, then: [React-redux now supports hooks](https://react-redux.js.org/next/api/hooks), so maybe that's a viable alternative to refactoring a bunch of code, which is hardly ever fun.
+
+Having said that, there's nothing wrong with using `treble-hook` AND `redux` going forward; it just means you'll have two different state management paradigms.
+
 ## Professional State Management
 
 Any engineer that owns feature development and/or maintenenance of a large, single-page application built on React will most likely admit that keeping the component/sub-component structure completely logical is critical for continuous delivery/improvement. Adding on top of that the need to manage application state across multiple feature areas without going insane from over-abundance of boilerplate, prop-passing hell, and hard to debug 3rd party libraries...well, you get the picture.
@@ -115,15 +131,25 @@ Coming soon.
 
 ## Authors
 
-The awesome engineering team at [Igneous Systems](https://www.igneous.io). Speaking of, we're always on the lookout for passionate engineers; visit [Igneous culture and careers](https://www.igneous.io/culture-and-careers) to learn more.
+Brought to you by the UX engineering team at [Igneous Systems](https://www.igneous.io). Speaking of, we're always on the lookout for fun-loving, passionate engineers; visit [Igneous culture and careers](https://www.igneous.io/culture-and-careers) to learn more.
 
 ## Issues
 
-Coming soon.
+### Bugs
 
-## Feaure Requests
+Find something we missed? File a bug and we'll take it from there. Want to fix yourself? See `Contributing` section below.
 
-Coming soon.
+[Where bugs are trapped and squashed...](https://github.com/igneous-systems/treble-hook/labels/bug)
+
+### Feaure Requests
+
+Got a cool feature idea? By all means do submit it. Is your idea already added by someone else? Go vote for it to help bump its roadmap priority.
+
+[Where features requests molt...](https://github.com/igneous-systems/treble-hook/labels/enhancement)
+
+## Contributing
+
+For now, we're keeping contributions internal, but that will change in the near future. Keep an eye out for our contribution guide (coming soon).
 
 ## Liscense
 
