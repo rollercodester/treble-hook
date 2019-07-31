@@ -1,6 +1,14 @@
 import React, { SetStateAction, useEffect, useState } from 'react'
 
-const HOOK_PUBLISH_INDEX = 1
+
+/**
+ * Positional indexes for the tuple that is returned by usePubSub.
+ */
+export enum TupleIndex {
+  State = 0,
+  Publish = 1,
+  Unsubscribe = 2,
+}
 
 // inspired by: https://gist.github.com/LeverOne/1308368
 // tslint:disable-next-line: no-any
@@ -40,7 +48,9 @@ const publish = <T>(topic: string) => (newState: T) => {
 
   if (topicRecord) {
 
-    Object.values(topicRecord.subscriptionMap).forEach(publicHook => publicHook[HOOK_PUBLISH_INDEX](newState))
+    Object.values(topicRecord.subscriptionMap).forEach(
+      publicHook => publicHook[TupleIndex.Publish](newState)
+    )
 
     // record current state, which is used to initialize new
     // subscribers of this topic with the last published state
