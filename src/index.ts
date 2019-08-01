@@ -1,6 +1,18 @@
 import React, { SetStateAction, useEffect, useState } from 'react'
 
-const HOOK_PUBLISH_INDEX = 1
+/**
+ * Positional indexes for the tuple that is returned by usePubSub.
+ */
+export enum TupleIndex {
+  State = 0,
+  Publish = 1,
+  Unsubscribe = 2,
+}
+
+/**
+ * The type that defines the publish method's interface.
+ */
+export type Publish<T> = (newState: T) => void
 
 // inspired by: https://gist.github.com/LeverOne/1308368
 // tslint:disable-next-line: no-any
@@ -40,14 +52,46 @@ const publish = <T>(topic: string) => (newState: T) => {
 
   if (topicRecord) {
 
-    Object.values(topicRecord.subscriptionMap).forEach(publicHook => publicHook[HOOK_PUBLISH_INDEX](newState))
+    // TODO: Pull this from config
+    const allowDupeState = false
+    // TODO: Pull this from config
+    const suppressDupeStateWarning = false
 
-    // record current state, which is used to initialize new
-    // subscribers of this topic with the last published state
-    topicRecord.currentState = newState
+    let proceed = true
 
-    // set a flag to indicate that this topic has been published to
-    topicRecord.hasBeenPublished = true
+    if (!allowDupeState) {
+
+      const currentStateCompare = JSON.stringify(topicRecord.currentState)
+      const newStateCompare = JSON.stringify(newState)
+
+      proceed = newStateCompare !== currentStateCompare
+
+    }
+
+    if (proceed) {
+
+      Object.values(topicRecord.subscriptionMap).forEach(
+        publicHook => publicHook[TupleIndex.Publish](newState)
+      )
+
+      // record current state, which is used to initialize new
+      // subscribers of this topic with the last published state
+      topicRecord.currentState = newState
+
+      // set a flag to indicate that this topic has been published to
+      topicRecord.hasBeenPublished = true
+
+    } else if (!suppressDupeStateWarning) {
+
+      // tslint:disable-next-line: no-console
+      console.warn(
+        '[treble-hook] A publish of unchanged state was attempted for topic:',
+        topic,
+        '\n\n\t- If this is desired behavior then set the "allowDupeState" flag to true',
+        '\n\t- To suppress this warning, set either "allowDupeState" or "suppressDupeStateWarning" flag to true'
+      )
+
+    }
 
   } else {
 
@@ -75,7 +119,7 @@ const unsubscribe: InternalUnsubscribe = (topic: string, subscriptionId?: string
 /**
  * Hook that enables pub-sub functionality across ReactJS function components.
  */
-function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
+export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
 
   if (arguments.length !== 2) {
 
@@ -162,8 +206,6 @@ function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
 
 }
 
-export { usePubSub }
-
 
 //
 //
@@ -173,7 +215,6 @@ export { usePubSub }
 
 type InternalUnsubscribe = (topic: string, subscriptionsId?: string) => PublicUnsubscribe
 type InternalTuple<T> = [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>]
-type Publish<T> = (newState: T) => void
 type PublicUnsubscribe = () => void
 type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe]
 
