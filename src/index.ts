@@ -52,16 +52,46 @@ const publish = <T>(topic: string) => (newState: T) => {
 
   if (topicRecord) {
 
-    Object.values(topicRecord.subscriptionMap).forEach(
-      publicHook => publicHook[TupleIndex.Publish](newState)
-    )
+    // TODO: Pull this from config
+    const allowDupeState = false
+    // TODO: Pull this from config
+    const suppressDupeStateWarning = false
 
-    // record current state, which is used to initialize new
-    // subscribers of this topic with the last published state
-    topicRecord.currentState = newState
+    let proceed = true
 
-    // set a flag to indicate that this topic has been published to
-    topicRecord.hasBeenPublished = true
+    if (!allowDupeState) {
+
+      const currentStateCompare = JSON.stringify(topicRecord.currentState)
+      const newStateCompare = JSON.stringify(newState)
+
+      proceed = newStateCompare !== currentStateCompare
+
+    }
+
+    if (proceed) {
+
+      Object.values(topicRecord.subscriptionMap).forEach(
+        publicHook => publicHook[TupleIndex.Publish](newState)
+      )
+
+      // record current state, which is used to initialize new
+      // subscribers of this topic with the last published state
+      topicRecord.currentState = newState
+
+      // set a flag to indicate that this topic has been published to
+      topicRecord.hasBeenPublished = true
+
+    } else if (!suppressDupeStateWarning) {
+
+      // tslint:disable-next-line: no-console
+      console.warn(
+        '[treble-hook] A publish of unchanged state was attempted for topic:',
+        topic,
+        '\n\n\t- If this is desired behavior then set the "allowDupeState" flag to true',
+        '\n\t- To suppress this warning, set either "allowDupeState" or "suppressDupeStateWarning" flag to true'
+      )
+
+    }
 
   } else {
 
