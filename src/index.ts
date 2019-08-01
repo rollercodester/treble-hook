@@ -1,6 +1,5 @@
 import React, { SetStateAction, useEffect, useState } from 'react'
 
-
 /**
  * Positional indexes for the tuple that is returned by usePubSub.
  */
@@ -9,6 +8,11 @@ export enum TupleIndex {
   Publish = 1,
   Unsubscribe = 2,
 }
+
+/**
+ * The type that defines the publish method's interface.
+ */
+export type Publish<T> = (newState: T) => void
 
 // inspired by: https://gist.github.com/LeverOne/1308368
 // tslint:disable-next-line: no-any
@@ -181,7 +185,6 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
 
 type InternalUnsubscribe = (topic: string, subscriptionsId?: string) => PublicUnsubscribe
 type InternalTuple<T> = [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>]
-type Publish<T> = (newState: T) => void
 type PublicUnsubscribe = () => void
 type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe]
 
