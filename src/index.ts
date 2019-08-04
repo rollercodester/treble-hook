@@ -3,7 +3,7 @@ import React, { SetStateAction, useEffect, useState } from 'react'
 /**
  * Positional indexes for the tuple that is returned by usePubSub.
  */
-export enum TupleIndex {
+export enum PubSubTupleIndex {
   State = 0,
   Publish = 1,
   Unsubscribe = 2,
@@ -27,13 +27,13 @@ const topics: TopicMap = {}
 /**
  * Returns published state for topic or undefined if topic is not yet published.
  */
-const getCurrentState = (topic: string) => {
+const getCurrentState = <T>(topic: string) => {
 
   const topicRecord = topics[topic]
 
   if (topicRecord && topicRecord.hasBeenPublished) {
 
-    return topicRecord.currentState
+    return topicRecord.currentState as SetStateAction<T>
 
   } else {
 
@@ -71,7 +71,7 @@ const publish = <T>(topic: string) => (newState: T) => {
     if (proceed) {
 
       Object.values(topicRecord.subscriptionMap).forEach(
-        publicHook => publicHook[TupleIndex.Publish](newState)
+        publicHook => publicHook[PubSubTupleIndex.Publish](newState)
       )
 
       // record current state, which is used to initialize new
@@ -88,7 +88,7 @@ const publish = <T>(topic: string) => (newState: T) => {
         '[treble-hook] A publish of unchanged state was attempted for topic:',
         topic,
         '\n\n\t- If this is desired behavior then set the "allowDupeState" flag to true',
-        '\n\t- To suppress this warning, set either "allowDupeState" or "suppressDupeStateWarning" flag to true'
+        '\n\t-To suppress this warning, set either "allowDupeState" or "suppressDupeStateWarning" flag to true'
       )
 
     }
@@ -141,11 +141,7 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
    */
   const internalUsePubSubState = () => {
 
-    let currentState = getCurrentState(topic)
-
-    currentState = typeof currentState !== 'undefined'
-      ? currentState = currentState as SetStateAction<T>
-      : currentState = defaultState
+    const currentState = getCurrentState<T | undefined>(topic)
 
     if (typeof state === 'undefined' && typeof currentState !== 'undefined') {
       setState(currentState)
@@ -188,6 +184,19 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
 
     // store tuple for new subscription
     topics[topic].subscriptionMap[newSubscriptionId] = internalTuple
+
+    if (typeof state === 'undefined') {
+
+      //
+      // this means that this is the first
+      // subscriber to the topic, so initialize
+      // the topic state by issuing a publish
+      // using the default state passed in
+      //
+
+      publish(topic)(defaultState);
+
+    }
 
     return () => {
 

@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import 'react'
-import { TupleIndex, usePubSub } from '../'
+import { PubSubTupleIndex, usePubSub } from '../'
 
 const TEST_TOPIC_1 = 'test-topic-1'
 const TEST_TOPIC_2 = 'test-topic-2'
@@ -15,7 +15,7 @@ describe('usePubSub', () => {
 
     const { result: subscriber1 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
 
-    expect(subscriber1.current[TupleIndex.State]).toBe(TEST_TOPIC_1_DEFAULT_STATE)
+    expect(subscriber1.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_DEFAULT_STATE)
 
   })
 
@@ -25,12 +25,12 @@ describe('usePubSub', () => {
     const { result: subscriber1 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
 
     act(() => {
-      subscriber1.current[TupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
+      subscriber1.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
     })
 
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_2_DEFAULT_STATE))
 
-    expect(subscriber2.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
 
   })
 
@@ -40,11 +40,11 @@ describe('usePubSub', () => {
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_2_DEFAULT_STATE))
 
     act(() => {
-      subscriber1.current[TupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
+      subscriber1.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
     })
 
-    expect(subscriber1.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
-    expect(subscriber2.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber1.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
 
   })
 
@@ -54,11 +54,11 @@ describe('usePubSub', () => {
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_2, TEST_TOPIC_2_DEFAULT_STATE))
 
     act(() => {
-      subscriber1.current[TupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
+      subscriber1.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
     })
 
-    expect(subscriber1.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
-    expect(subscriber2.current[TupleIndex.State]).toBe(TEST_TOPIC_2_DEFAULT_STATE)
+    expect(subscriber1.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_2_DEFAULT_STATE)
 
   })
 
@@ -68,19 +68,19 @@ describe('usePubSub', () => {
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_2_DEFAULT_STATE))
 
     act(() => {
-      subscriber1.current[TupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
+      subscriber1.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
     })
 
-    expect(subscriber1.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
-    expect(subscriber2.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber1.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
 
     act(() => {
-      subscriber2.current[TupleIndex.Unsubscribe]()
-      subscriber1.current[TupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_2)
+      subscriber2.current[PubSubTupleIndex.Unsubscribe]()
+      subscriber1.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_2)
     })
 
-    expect(subscriber1.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_2)
-    expect(subscriber2.current[TupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
+    expect(subscriber1.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_2)
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_PUBLISH_STATE_1)
 
   })
 

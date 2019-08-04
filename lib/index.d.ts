@@ -1,4 +1,4 @@
-export declare enum TupleIndex {
+export declare enum PubSubTupleIndex {
     State = 0,
     Publish = 1,
     Unsubscribe = 2
