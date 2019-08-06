@@ -29,9 +29,17 @@ yarn add treble-hook
 npm install --save treble-hook
 ```
 
+## Go ahead and give the tires a quick kick
+
+Live code is so much better and more fun to boot, so we created a simple game to showcase treble-hook usage...
+
+Step right up and play ["Crack That Code!" on codesandbox](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1) !
+
 ## Usage
 
 Contrived sign-in component and a component that displays active user (signed-in user).
+
+> _But...wouldn't you rather see a [real live code example](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1)?_
 
 ```tsx
 import React, { ChangeEvent, useState } from 'react'
@@ -123,7 +131,7 @@ Even though treble-hook was written in Typescript and thus is the preferred way 
 
 To mitigate this, it's a **strongly** suggested best practice to pre-define your state types with one or more enums and interfaces. This, of course, assumes you are writing your app in Typescript...and if you're not, you really should, but it's certainly not required. Regardless, like in Ghost Busters, you need to exercise extreme discipline and ensure that your proton packs don't cross streams. In other words, make sure that the data type published to a topic remains consistent throughout your application.
 
-See the example code (coming soon) for a peek at how we use enums/interfaces to _help_ enforce how topic policies are published, but even with this, we still have to publish application state responsibly. Can you say "code reviews"?
+See the [live example code](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1) for a peek at how we use enums/interfaces to _help_ enforce how topic policies are published, but even with this, we still have to publish application state responsibly. Can you say "code reviews"?
 
 ## Documentation
 
