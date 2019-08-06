@@ -7,7 +7,7 @@
   <br />
   <div style="float:left;">
     <a href="https://www.npmjs.com/package/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/v/treble-hook.svg?style=flat" alt="version"></a>
-    <a href="https://travis-ci.org/rollercodester/treble-hook" rel="nofollow"><img src="https://img.shields.io/travis/rollercodester/treble-hook.svg?style=flat" alt="Build Status"></a>
+    <img src="https://img.shields.io/travis/igneous-systems/treble-hook.svg?branch=master&style=flat" alt="Build Status">
     <a href="http://www.npmtrends.com/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/dm/treble-hook.svg?style=flat" alt="downloads"></a>
     <a href="https://github.com/igneous-systems/treble-hook/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/npm/l/treble-hook.svg?style=flat" alt="MIT License"></a>
   </div>
