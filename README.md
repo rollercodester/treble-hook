@@ -7,7 +7,7 @@
   <br />
   <div style="float:left;">
     <a href="https://www.npmjs.com/package/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/v/treble-hook.svg?style=flat" alt="version"></a>
-    <a href="https://travis-ci.org/rollercodester/treble-hook" rel="nofollow"><img src="https://img.shields.io/travis/rollercodester/treble-hook.svg?style=flat" alt="Build Status"></a>
+    <img src="https://img.shields.io/travis/igneous-systems/treble-hook.svg?branch=master&style=flat" alt="Build Status">
     <a href="http://www.npmtrends.com/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/dm/treble-hook.svg?style=flat" alt="downloads"></a>
     <a href="https://github.com/igneous-systems/treble-hook/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/npm/l/treble-hook.svg?style=flat" alt="MIT License"></a>
   </div>
@@ -29,9 +29,17 @@ yarn add treble-hook
 npm install --save treble-hook
 ```
 
+## Go ahead and give the tires a quick kick
+
+Live code is so much better and more fun to boot, so we created a simple game to showcase treble-hook usage...
+
+Step right up and play ["Crack That Code!" on codesandbox](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1) !
+
 ## Usage
 
 Contrived sign-in component and a component that displays active user (signed-in user).
+
+> _But...wouldn't you rather see a [real live code example](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1)?_
 
 ```tsx
 import React, { ChangeEvent, useState } from 'react'
@@ -115,15 +123,15 @@ Having said that, there's nothing wrong with using `treble-hook` AND `redux` goi
 
 Any engineer that owns feature development and/or maintenenance of a large, single-page application built on React will most likely admit that keeping the component/sub-component structure completely logical is critical for continuous delivery/improvement. Adding on top of that the need to manage application state across multiple feature areas without going insane from over-abundance of boilerplate, prop-passing hell, and hard to debug 3rd party libraries...well, you get the picture.
 
-To solve the problem, we wrote treble-hook, which very simply allows any component in an app to subscribe to state from anywhere in the tree and subsequently publish state at-will so that other components anywhere in the tree picks up those changes. Sounds like this would take a complicated library, right? Nope. Because treble-hook takes advantage of the power of hooks architecture, this functionality is possible via a library with zero hard dependencies and less than 3KB of code.
+To solve the problem, we wrote treble-hook, which very simply allows any component in an app to subscribe to state from anywhere in the tree and subsequently publish state at-will so that other components anywhere in the tree pick up those changes. Sounds like this would take a complicated library, right? Nope. Because treble-hook takes advantage of the power of hooks architecture, this functionality is possible via a library with zero hard dependencies and less than 3KB of code.
 
 ## Caveat
 
 Even though treble-hook was written in Typescript and thus is the preferred way to consume the library, types in Typescript are compile-time only, meaning they cannot be enforced at runtime without not-so-perfect third party libraries. As such, it's possible for one component to subscribe to a topic using a completely different type than that of another subscribing component. If this were to happen and both components were to publish different data types, it would result in unexpected side-effects, for sure.
 
-To mitigate this, it's a **strongly** suggested best practice to pre-define your state types with one or more enums and interfaces. This, of course, assumes you are writing your app in Typescript...and if you're not, you really should. But you don't have to. Regardless, like in Ghost Busters, you need to exercise extreme discipline and ensure that your proton packs don't cross streams. In other words, make sure that the data type published to a topic remains consistent throughout your application.
+To mitigate this, it's a **strongly** suggested best practice to pre-define your state types with one or more enums and interfaces. This, of course, assumes you are writing your app in Typescript...and if you're not, you really should, but it's certainly not required. Regardless, like in Ghost Busters, you need to exercise extreme discipline and ensure that your proton packs don't cross streams. In other words, make sure that the data type published to a topic remains consistent throughout your application.
 
-See the example code (coming soon) for a peek at how we use enums/interfaces to _help_ enforce how topic policies are published, but even with this, we still have to publish application state responsibly. Can you say "code reviews"?
+See the [live example code](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1) for a peek at how we use enums/interfaces to _help_ enforce how topic policies are published, but even with this, we still have to publish application state responsibly. Can you say "code reviews"?
 
 ## Documentation
 
@@ -131,7 +139,7 @@ Coming soon.
 
 ## Authors
 
-Brought to you by the UX engineering team at [Igneous Systems](https://www.igneous.io). Speaking of, we're always on the lookout for fun-loving, passionate engineers; visit [Igneous culture and careers](https://www.igneous.io/culture-and-careers) to learn more.
+Brought to you by the engineering team at [Igneous](https://www.igneous.io). Speaking of, we're always on the lookout for fun-loving, passionate engineers; visit [Igneous culture and careers](https://www.igneous.io/culture-and-careers) to learn more.
 
 ## Issues
 
@@ -143,7 +151,7 @@ Find something we missed? File a bug and we'll take it from there. Want to fix y
 
 ### Feaure Requests
 
-Got a cool feature idea? By all means do submit it. Is your idea already added by someone else? Go vote for it to help bump its roadmap priority.
+Got a cool feature idea? By all means do submit it. Is your idea already added by someone else? Vote for it via a Github reaction to help bump its roadmap priority.
 
 [Where features requests molt...](https://github.com/igneous-systems/treble-hook/labels/enhancement)
 

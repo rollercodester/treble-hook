@@ -1,9 +1,16 @@
+/*!*
+ * Copyright (c) Igneous, Inc. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import React, { SetStateAction, useEffect, useState } from 'react'
 
 /**
  * Positional indexes for the tuple that is returned by usePubSub.
  */
-export enum TupleIndex {
+export enum PubSubTupleIndex {
   State = 0,
   Publish = 1,
   Unsubscribe = 2,
@@ -14,6 +21,28 @@ export enum TupleIndex {
  */
 export type Publish<T> = (newState: T) => void
 
+/**
+ * Interface that defines the config for treble-hook.
+ */
+export interface TrebleHookConfig {
+  suppressDupeStateWarning?: boolean
+  topicConfig?: TopicConfigMap
+}
+
+/**
+ * Interface for a topic's config.
+ */
+export interface TopicConfig {
+  allowDupeState?: boolean
+}
+
+/**
+ * Map that holds all topic configs.
+ */
+export interface TopicConfigMap {
+  [topic: string]: TopicConfig
+}
+
 // inspired by: https://gist.github.com/LeverOne/1308368
 // tslint:disable-next-line: no-any
 const getUUID = (a?: any, b?: any) => {
@@ -21,19 +50,23 @@ const getUUID = (a?: any, b?: any) => {
   for(b=a='';a++<36;b+=4<<~a*6.5?(a^15?8^Math.random()*(a^20?16:4):4).toString(16):'-');return b as string
 }
 
+// this is where the config is cached and
+// initialized with default settings
+let trebleHookConfig: TrebleHookConfig = {}
+
 // this is where all topic subscriptions are ultimately cached
 const topics: TopicMap = {}
 
 /**
  * Returns published state for topic or undefined if topic is not yet published.
  */
-const getCurrentState = (topic: string) => {
+const getCurrentState = <T>(topic: string) => {
 
   const topicRecord = topics[topic]
 
   if (topicRecord && topicRecord.hasBeenPublished) {
 
-    return topicRecord.currentState
+    return topicRecord.currentState as SetStateAction<T>
 
   } else {
 
@@ -52,10 +85,9 @@ const publish = <T>(topic: string) => (newState: T) => {
 
   if (topicRecord) {
 
-    // TODO: Pull this from config
-    const allowDupeState = false
-    // TODO: Pull this from config
-    const suppressDupeStateWarning = false
+    const allowDupeState = trebleHookConfig.topicConfig
+      && trebleHookConfig.topicConfig[topic]
+      && trebleHookConfig.topicConfig[topic].allowDupeState
 
     let proceed = true
 
@@ -71,7 +103,7 @@ const publish = <T>(topic: string) => (newState: T) => {
     if (proceed) {
 
       Object.values(topicRecord.subscriptionMap).forEach(
-        publicHook => publicHook[TupleIndex.Publish](newState)
+        publicHook => publicHook[PubSubTupleIndex.Publish](newState)
       )
 
       // record current state, which is used to initialize new
@@ -81,14 +113,15 @@ const publish = <T>(topic: string) => (newState: T) => {
       // set a flag to indicate that this topic has been published to
       topicRecord.hasBeenPublished = true
 
-    } else if (!suppressDupeStateWarning) {
+    } else if (!trebleHookConfig.suppressDupeStateWarning) {
 
       // tslint:disable-next-line: no-console
       console.warn(
         '[treble-hook] A publish of unchanged state was attempted for topic:',
         topic,
         '\n\n\t- If this is desired behavior then set the "allowDupeState" flag to true',
-        '\n\t- To suppress this warning, set either "allowDupeState" or "suppressDupeStateWarning" flag to true'
+        '\n\t-To suppress this warning, set either "allowDupeState" for topic to true ' +
+        'or set the global "suppressDupeStateWarning" flag to true'
       )
 
     }
@@ -113,6 +146,12 @@ const unsubscribe: InternalUnsubscribe = (topic: string, subscriptionId?: string
     delete topicRecord.subscriptionMap[subscriptionId]
 
   }
+
+}
+
+export function configPubSub(config: TrebleHookConfig) {
+
+  trebleHookConfig = {...trebleHookConfig, ...config}
 
 }
 
@@ -141,11 +180,7 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
    */
   const internalUsePubSubState = () => {
 
-    let currentState = getCurrentState(topic)
-
-    currentState = typeof currentState !== 'undefined'
-      ? currentState = currentState as SetStateAction<T>
-      : currentState = defaultState
+    const currentState = getCurrentState<T | undefined>(topic)
 
     if (typeof state === 'undefined' && typeof currentState !== 'undefined') {
       setState(currentState)
@@ -188,6 +223,19 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
 
     // store tuple for new subscription
     topics[topic].subscriptionMap[newSubscriptionId] = internalTuple
+
+    if (typeof state === 'undefined') {
+
+      //
+      // this means that this is the first
+      // subscriber to the topic, so initialize
+      // the topic state by issuing a publish
+      // using the default state passed in
+      //
+
+      publish(topic)(defaultState);
+
+    }
 
     return () => {
 
