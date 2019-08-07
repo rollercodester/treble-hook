@@ -115,14 +115,20 @@ const publish = <T>(topic: string) => (newState: T) => {
 
     } else if (!trebleHookConfig.suppressDupeStateWarning) {
 
-      // tslint:disable-next-line: no-console
-      console.warn(
-        '[treble-hook] A publish of unchanged state was attempted for topic:',
-        topic,
-        '\n\n\t- If this is desired behavior then set the "allowDupeState" flag to true',
-        '\n\t-To suppress this warning, set either "allowDupeState" for topic to true ' +
-        'or set the global "suppressDupeStateWarning" flag to true'
-      )
+      const logWarning = process && process.env && process.env.NODE_ENV ? process.env.NODE_ENV === 'development' : true
+
+      if (logWarning) {
+
+        // tslint:disable-next-line: no-console
+        console.warn(
+          '[treble-hook] A publish of unchanged state was attempted for topic:',
+          topic,
+          '\n\n\t- If this is desired behavior then set the "allowDupeState" flag to true',
+          '\n\t-To suppress this warning, set either "allowDupeState" for topic to true ' +
+          'or set the global "suppressDupeStateWarning" flag to true'
+        )
+
+      }
 
     }
 
