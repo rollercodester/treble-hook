@@ -1,6 +1,6 @@
 {
   "name": "treble-hook",
-  "version": "0.0.32",
+  "version": "1.0.7",
   "description": "Get hooked on simple subscribe-and-publish in ReactJS.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

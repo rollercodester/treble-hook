@@ -15,8 +15,9 @@
 
 <div style="float:none;">&nbsp;</div>
 
-## WARNING
-This is still pre-release, so consider it beta, meaning there will likely be changes; however, we don't envision breaking interface.
+## Documentation
+
+See the [Treble-Hook Wiki](https://github.com/igneous-systems/treble-hook/wiki) for API documentation.
 
 ## Installation
 
@@ -132,10 +133,6 @@ Even though treble-hook was written in Typescript and thus is the preferred way 
 To mitigate this, it's a **strongly** suggested best practice to pre-define your state types with one or more enums and interfaces. This, of course, assumes you are writing your app in Typescript...and if you're not, you really should, but it's certainly not required. Regardless, like in Ghost Busters, you need to exercise extreme discipline and ensure that your proton packs don't cross streams. In other words, make sure that the data type published to a topic remains consistent throughout your application.
 
 See the [live example code](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1) for a peek at how we use enums/interfaces to _help_ enforce how topic policies are published, but even with this, we still have to publish application state responsibly. Can you say "code reviews"?
-
-## Documentation
-
-Coming soon.
 
 ## Authors
 
