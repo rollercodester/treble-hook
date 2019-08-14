@@ -28,6 +28,48 @@ describe('usePubSub', () => {
 
   })
 
+  it(`should return given default state of first subscriber for any other subscribers
+  if no publish has been called for topic`, () => {
+
+    renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
+    const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, 'blablabla'))
+
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_DEFAULT_STATE)
+
+  })
+
+  it(`should handle numerous async subscriptions so that first to process sets default value (i.e. FIFO)`, () => {
+
+    const subscriberPromises = []
+
+    let defaultState = TEST_TOPIC_1_DEFAULT_STATE
+
+    for (let index = 0; index < 100; index++) {
+
+      subscriberPromises.push(
+        new Promise<string>(resolve => {
+
+          const { result: subscriber } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, defaultState))
+
+          resolve(subscriber.current[PubSubTupleIndex.State])
+
+        })
+      )
+
+      // make sure all other subscribers after first use different default
+      defaultState = TEST_TOPIC_2_DEFAULT_STATE
+
+    }
+
+    Promise.all(subscriberPromises)
+      .then(subscribers => {
+        subscribers.forEach(s => {
+          expect(s).toBe(TEST_TOPIC_1_DEFAULT_STATE)
+        })
+      })
+
+  })
+
   it(`should return current publish state instead of given default state if a publish
       has been called for topic`, () => {
 
@@ -57,7 +99,7 @@ describe('usePubSub', () => {
 
   })
 
-  it(`should NOT publish state to subscribers that not subscribed to published topic`, () => {
+  it(`should NOT publish state to subscribers that have not subscribed to published topic`, () => {
 
     const { result: subscriber1 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_2, TEST_TOPIC_2_DEFAULT_STATE))
@@ -93,8 +135,10 @@ describe('usePubSub', () => {
 
   })
 
-  it(`should output a warning message if a duplicate state is published for a topic when \
+  it(`should output a warning message when in development mode if a duplicate state is published for a topic when \
   the global suppressDupeStateWarning setting is false and the topic's allowDupeState setting is also false`, () => {
+
+    process.env.NODE_ENV = 'development'
 
     const getOutput = captureWarningOutput()
 
@@ -119,8 +163,10 @@ describe('usePubSub', () => {
 
   })
 
-  it(`should NOT output a warning message if a duplicate state is published for a topic when \
+  it(`should NOT output a warning message when in development mode if a duplicate state is published for a topic when \
   the global suppressDupeStateWarning setting is true`, () => {
+
+    process.env.NODE_ENV = 'development'
 
     const getOutput = captureWarningOutput()
 
@@ -140,8 +186,10 @@ describe('usePubSub', () => {
 
   })
 
-  it(`should NOT output a warning message if a duplicate state is published for a topic when \
+  it(`should NOT output a warning message in development mode if a duplicate state is published for a topic when \
   the topic's allowDupeState setting is true`, () => {
+
+    process.env.NODE_ENV = 'development'
 
     const getOutput = captureWarningOutput()
 
@@ -150,6 +198,35 @@ describe('usePubSub', () => {
       topicConfig: {
         [TEST_TOPIC_1]: {
           allowDupeState: true,
+        },
+      },
+    })
+
+    const { result: subscriber1 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
+    const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_2_DEFAULT_STATE))
+
+    act(() => {
+      subscriber1.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
+      subscriber2.current[PubSubTupleIndex.Publish](TEST_TOPIC_1_PUBLISH_STATE_1)
+    })
+
+    expect(getOutput()).not.toContain('A publish of unchanged state was attempted for topic:')
+
+  })
+
+  it(`should NOT output a warning message when NOT in development mode if a duplicate state is published for a \
+  topic when the global suppressDupeStateWarning setting is false and the topic's allowDupeState setting is also \
+  false`, () => {
+
+    process.env.NODE_ENV = 'production'
+
+    const getOutput = captureWarningOutput()
+
+    configPubSub({
+      suppressDupeStateWarning: false,
+      topicConfig: {
+        [TEST_TOPIC_1]: {
+          allowDupeState: false,
         },
       },
     })
