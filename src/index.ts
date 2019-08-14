@@ -85,9 +85,11 @@ const publish = <T>(topic: string) => (newState: T) => {
 
   if (topicRecord) {
 
-    const allowDupeState = trebleHookConfig.topicConfig
+    const allowDupeState = Boolean(
+      trebleHookConfig.topicConfig
       && trebleHookConfig.topicConfig[topic]
       && trebleHookConfig.topicConfig[topic].allowDupeState
+    )
 
     let proceed = true
 

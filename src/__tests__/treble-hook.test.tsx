@@ -28,6 +28,48 @@ describe('usePubSub', () => {
 
   })
 
+  it(`should return given default state of first subscriber for any other subscribers
+  if no publish has been called for topic`, () => {
+
+    renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
+    const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, 'blablabla'))
+
+    expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_DEFAULT_STATE)
+
+  })
+
+  it(`should handle numerous async subscriptions so that first to process sets default value (i.e. FIFO)`, () => {
+
+    const subscriberPromises = []
+
+    let defaultState = TEST_TOPIC_1_DEFAULT_STATE
+
+    for (let index = 0; index < 100; index++) {
+
+      subscriberPromises.push(
+        new Promise<string>(resolve => {
+
+          const { result: subscriber } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, defaultState))
+
+          resolve(subscriber.current[PubSubTupleIndex.State])
+
+        })
+      )
+
+      // make sure all other subscribers after first use different default
+      defaultState = TEST_TOPIC_2_DEFAULT_STATE
+
+    }
+
+    Promise.all(subscriberPromises)
+      .then(subscribers => {
+        subscribers.forEach(s => {
+          expect(s).toBe(TEST_TOPIC_1_DEFAULT_STATE)
+        })
+      })
+
+  })
+
   it(`should return current publish state instead of given default state if a publish
       has been called for topic`, () => {
 
@@ -57,7 +99,7 @@ describe('usePubSub', () => {
 
   })
 
-  it(`should NOT publish state to subscribers that not subscribed to published topic`, () => {
+  it(`should NOT publish state to subscribers that have not subscribed to published topic`, () => {
 
     const { result: subscriber1 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE))
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_2, TEST_TOPIC_2_DEFAULT_STATE))
