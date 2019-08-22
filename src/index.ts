@@ -258,7 +258,7 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
   }, [])
 
   // return the subscription tuple
-  return [state || defaultState, publish<T>(topic), unsubscribe(topic, subscriptionId)]
+  return [typeof state !== 'undefined' ? state : defaultState, publish<T>(topic), unsubscribe(topic, subscriptionId)]
 
 }
 
