@@ -183,6 +183,9 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
   // internal hook that stores the unique ID for this topic subscriber
   const [subscriptionId, setSubscriptionId] = useState<string>()
 
+  // memoize the publish function before returning it from this Hook
+  const publishTopic = React.useMemo(() => publish<T>(topic), [topic])
+
   /**
    * Internal hook for this subscription that is used to cache the resulting tuple.
    */
@@ -241,7 +244,7 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
       // using the default state passed in
       //
 
-      publish(topic)(defaultState);
+      publishTopic(defaultState);
 
     }
 
@@ -258,7 +261,7 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
   }, [])
 
   // return the subscription tuple
-  return [typeof state !== 'undefined' ? state : defaultState, publish<T>(topic), unsubscribe(topic, subscriptionId)]
+  return [typeof state !== 'undefined' ? state : defaultState, publishTopic, unsubscribe(topic, subscriptionId)]
 
 }
 
