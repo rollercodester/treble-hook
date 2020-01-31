@@ -42,5 +42,40 @@
   },
   "npm.packageManager": "yarn",
   "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true
+  "files.insertFinalNewline": true,
+  "todo-tree.highlights.customHighlight": {
+    "FEATURE_FLAG": {
+      "background": "cyan",
+      "foreground": "black",
+      "iconColour": "cyan"
+    },
+    "FIXME": {
+      "background": "red",
+      "foreground": "white",
+      "iconColour": "red"
+    },
+    "FUTURE": {
+      "background": "#3f5a89",
+      "foreground": "white",
+      "iconColour": "#3f5a89"
+    }
+  },
+  "todo-tree.highlights.defaultHighlight": {
+    "background": "yellow",
+    "foreground": "black",
+    "iconColour": "yellow",
+    "type": "tag"
+  },
+  "todo-tree.filtering.excludeGlobs": [
+    "**/*.md"
+  ],
+  "todo-tree.filtering.includeGlobs": [
+    "**/src/**"
+  ],
+  "todo-tree.general.tags": [
+    "TODO:",
+    "FIXME:",
+    "FEATURE_FLAG:",
+    "FUTURE:"
+  ]
 }

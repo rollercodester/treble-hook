@@ -255,9 +255,6 @@ export function usePubSub<T>(topic: string, defaultState: T, publishDefaultState
 
     if (typeof state === 'undefined' && publishDefaultState) {
 
-      // tslint:disable-next-line
-      console.log('about to publish default state:', defaultState)
-
       //
       // this means that this is the first
       // subscriber to the topic, so initialize
