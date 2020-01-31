@@ -7,7 +7,8 @@
 export declare enum PubSubTupleIndex {
     State = 0,
     Publish = 1,
-    Unsubscribe = 2
+    Unsubscribe = 2,
+    DeleteTopic = 3
 }
 export declare type Publish<T> = (newState: T) => void;
 export interface TrebleHookConfig {
@@ -21,7 +22,8 @@ export interface TopicConfigMap {
     [topic: string]: TopicConfig;
 }
 export declare function configPubSub(config: TrebleHookConfig): void;
-export declare function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T>;
+export declare function usePubSub<T>(topic: string, defaultState: T, publishDefaultState?: boolean): SubscriptionTuple<T>;
 declare type PublicUnsubscribe = () => void;
-declare type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe];
+declare type PublicDeleteTopic = () => void;
+declare type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe, PublicDeleteTopic];
 export {};

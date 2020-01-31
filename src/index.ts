@@ -14,6 +14,7 @@ export enum PubSubTupleIndex {
   State = 0,
   Publish = 1,
   Unsubscribe = 2,
+  DeleteTopic = 3,
 }
 
 /**
@@ -157,6 +158,22 @@ const unsubscribe: InternalUnsubscribe = (topic: string, subscriptionId?: string
 
 }
 
+/**
+ * Deletes given topic from cache
+ */
+const deleteTopic = (topic: string) => () => {
+
+  delete topics[topic]
+
+  // tslint:disable-next-line: no-console
+  console.warn(
+    `[treble-hook] The topic "${topic}" was just deleted.`,
+    '\n\n\t- If any component attempts to access state for the deleted topic, errors/side-effects may occur.',
+    '\n\t- To mitigate this possibility, make sure that only top-level components delete topics'
+  )
+
+}
+
 export function configPubSub(config: TrebleHookConfig) {
 
   trebleHookConfig = {...trebleHookConfig, ...config}
@@ -166,13 +183,14 @@ export function configPubSub(config: TrebleHookConfig) {
 /**
  * Hook that enables pub-sub functionality across ReactJS function components.
  */
-export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<T> {
+export function usePubSub<T>(topic: string, defaultState: T, publishDefaultState = true): SubscriptionTuple<T> {
 
-  if (arguments.length !== 2) {
+  if (arguments.length > 3) {
 
     throw new Error(
-      `Invalid hook usage; hook must be initialized with two arguments. The first
-      argument is the topic and the second argument is the default state value for the topic.`
+      `Invalid hook usage; hook must be initialized with either two or three arguments. The first
+      argument is the topic, the second argument is the default state value for the topic, and the
+      optional third argument determines whether or not to publish default state, which defaults to true.`
     )
 
   }
@@ -235,7 +253,10 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
     // store tuple for new subscription
     topics[topic].subscriptionMap[newSubscriptionId] = internalTuple
 
-    if (typeof state === 'undefined') {
+    if (typeof state === 'undefined' && publishDefaultState) {
+
+      // tslint:disable-next-line
+      console.log('about to publish default state:', defaultState)
 
       //
       // this means that this is the first
@@ -261,10 +282,16 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
   }, [])
 
   // return the subscription tuple
-  return [typeof state !== 'undefined' ? state : defaultState, publishTopic, unsubscribe(topic, subscriptionId)]
+  return [
+    typeof state !== 'undefined'
+      ? state
+      : defaultState,
+    publishTopic,
+    unsubscribe(topic, subscriptionId),
+    deleteTopic(topic),
+  ]
 
 }
-
 
 //
 //
@@ -275,7 +302,8 @@ export function usePubSub<T>(topic: string, defaultState: T): SubscriptionTuple<
 type InternalUnsubscribe = (topic: string, subscriptionsId?: string) => PublicUnsubscribe
 type InternalTuple<T> = [T | undefined, React.Dispatch<React.SetStateAction<T | undefined>>]
 type PublicUnsubscribe = () => void
-type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe]
+type PublicDeleteTopic = () => void
+type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe, PublicDeleteTopic]
 
 interface TopicMap {
   // tslint:disable-next-line: no-any
