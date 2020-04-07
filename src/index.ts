@@ -183,7 +183,7 @@ export function configPubSub(config: TrebleHookConfig) {
 /**
  * Hook that enables pub-sub functionality across ReactJS function components.
  */
-export function usePubSub<T>(topic: string, defaultState: T, publishDefaultState = true): SubscriptionTuple<T> {
+export function usePubSub<T>(topic: string, defaultState: T, publishDefaultState = false): SubscriptionTuple<T> {
 
   if (arguments.length > 3) {
 

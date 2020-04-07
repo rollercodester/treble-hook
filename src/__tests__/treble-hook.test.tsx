@@ -23,8 +23,8 @@ describe('usePubSub', () => {
 
   it(`should return default state of second subscriber if first subscriber elected to not publish its default state for topic`, () => {
 
-    renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_1, false))
-    const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_2))
+    renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_1))
+    const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_2, true))
 
     expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_DEFAULT_STATE_2)
 
@@ -50,7 +50,7 @@ describe('usePubSub', () => {
 
   it(`should return given default state of first subscriber for any other subscribers if no publish has been called for topic`, () => {
 
-    renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_1))
+    renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_1, true))
     const { result: subscriber2 } = renderHook(() => usePubSub<string>(TEST_TOPIC_1, TEST_TOPIC_1_DEFAULT_STATE_2))
 
     expect(subscriber2.current[PubSubTupleIndex.State]).toBe(TEST_TOPIC_1_DEFAULT_STATE_1)
