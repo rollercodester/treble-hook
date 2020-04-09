@@ -1,6 +1,6 @@
 {
   "name": "treble-hook",
-  "version": "1.0.13",
+  "version": "2.0.0-alpha.1",
   "description": "Get hooked on simple subscribe-and-publish in ReactJS.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -20,10 +20,10 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn lint && tsc",
-    "lint": "tslint -c ./tslint.json ./src/**/*.ts",
+    "lint": "tslint -c ./tslint.json ./src/**/*.tsx",
     "prepublishOnly": "yarn test",
     "pretest": "yarn build",
-    "test": "yarn jest"
+    "test": "yarn jest --passWithNoTests"
   },
   "files": [
     "lib"
