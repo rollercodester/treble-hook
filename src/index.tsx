@@ -24,18 +24,24 @@ export default (function TrebleHookPublisherFactory() {
      */
     addTopic<T>(topicName: string, defaultValue: T) {
 
-      if (topicsCache[topicName]) {
-        throw new Error(`The topic "${topicName}" has already been added.`)
-      }
+      if (!topicsCache[topicName]) {
 
-      // @ts-ignore
-      const context = createPublishContext<T>()
+        //
+        //
+        // topic is new, so really add it
+        //
+        //
 
-      const provider = createPublishProvider<T>(context, defaultValue)
+        // @ts-ignore
+        const context = createPublishContext<T>()
 
-      topicsCache[topicName] = {
-        context,
-        provider,
+        const provider = createPublishProvider<T>(context, defaultValue)
+
+        topicsCache[topicName] = {
+          context,
+          provider,
+        }
+
       }
 
     },
