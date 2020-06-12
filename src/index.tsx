@@ -228,7 +228,7 @@ function createPublishProvider<T>(
 
     }, [stateValue])
 
-    return <TrebleHookContext.Provider value={contextState} {...props} />
+    return <TrebleHookContext.Provider {...props} value={contextState} />
 
   }
 
