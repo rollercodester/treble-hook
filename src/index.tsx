@@ -195,12 +195,12 @@ function createPublishContext<T>() {
 
 function createPublishProvider<T>(
   topicName: string,
-  TrebleHookContext: Context<T>,
+  TrebleHookContext: Context<PubSubTuple<T>>,
   defaultValue: T,
   initWithSessionStorage = false
 ) {
 
-  return (props: ProviderProps<T>) => {
+  return (props: ProviderProps<PubSubTuple<T>>) => {
 
     const contextState = useState(defaultValue)
     const [stateValue] = contextState
