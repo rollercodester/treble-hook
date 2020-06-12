@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 declare const _default: {
-    addTopic<T>(topicName: string, defaultValue: T): void;
+    addTopic<T>(topicName: string, defaultValue: T, initWithSessionStorage?: boolean): void;
     getPublisher(topics?: string[] | undefined): React.FunctionComponent<{
         children?: React.ReactNode;
     }>;

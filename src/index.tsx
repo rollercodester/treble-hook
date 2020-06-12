@@ -8,6 +8,8 @@ import React, {
   ProviderProps,
   SetStateAction,
   useContext,
+  useEffect,
+  useRef,
   useState
 } from 'react'
 
@@ -21,8 +23,10 @@ export default (function TrebleHookPublisherFactory() {
      * Adds a new topic to TrebleHook that can be published and subscribed to.
      * @param topicName The name of the topic to add.
      * @param defaultValue The default (initial) state value for the topic.
+     * @param initWithSessionStorage Determines whether to retrieve default (init) value from session storage.
+     * If true, then when a new value is published, the value will also be stored in session storage.
      */
-    addTopic<T>(topicName: string, defaultValue: T) {
+    addTopic<T>(topicName: string, defaultValue: T, initWithSessionStorage = false) {
 
       if (!topicsCache[topicName]) {
 
@@ -35,7 +39,31 @@ export default (function TrebleHookPublisherFactory() {
         // @ts-ignore
         const context = createPublishContext<T>()
 
-        const provider = createPublishProvider<T>(context, defaultValue)
+        let normDefaultValue = defaultValue
+
+        if (initWithSessionStorage) {
+
+          //
+          // consumer requested to init with session
+          // storage, so check to see if a value
+          // has been stored for this topic
+          //
+
+          const checkValue = sessionStorage.getItem(topicName)
+
+          if (checkValue !== null) {
+
+            try {
+              normDefaultValue = JSON.parse(checkValue) as T
+            } catch (_) {
+              normDefaultValue = checkValue as unknown as T
+            }
+
+          }
+
+        }
+
+        const provider = createPublishProvider<T>(topicName, context, normDefaultValue, initWithSessionStorage)
 
         topicsCache[topicName] = {
           context,
@@ -166,13 +194,44 @@ function createPublishContext<T>() {
 }
 
 function createPublishProvider<T>(
+  topicName: string,
   TrebleHookContext: Context<T>,
-  defaultValue: T
+  defaultValue: T,
+  initWithSessionStorage = false
 ) {
+
   return (props: ProviderProps<T>) => {
+
     const contextState = useState(defaultValue)
+    const [stateValue] = contextState
+    const isMounted = useRef(true)
+
+    useEffect(() => {
+      return () => {
+        isMounted.current = false
+      }
+    }, [])
+
+    useEffect(() => {
+
+      if (isMounted.current && initWithSessionStorage) {
+
+        //
+        // consumer requested to init with session
+        // storage, so store value accordingly so
+        // that next init will pick up session value
+        //
+
+        sessionStorage.setItem(topicName, JSON.stringify(stateValue))
+
+      }
+
+    }, [stateValue])
+
     return <TrebleHookContext.Provider value={contextState} {...props} />
+
   }
+
 }
 
 function getNoTopicErrorMessage(topicName: string) {
