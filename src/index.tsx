@@ -66,7 +66,7 @@ export default (function TrebleHookPublisherFactory() {
         const provider = createPublishProvider<T>(topicName, context, normDefaultValue, initWithSessionStorage)
 
         topicsCache[topicName] = {
-          context,
+          context: context as Context<PubSubTuple<unknown>>,
           provider,
         }
 
