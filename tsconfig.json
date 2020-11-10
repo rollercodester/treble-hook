@@ -11,7 +11,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "lib",

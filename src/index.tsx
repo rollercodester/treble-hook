@@ -175,7 +175,7 @@ export enum PubSubTupleIndex {
 interface Topic {
   [name: string]: {
     provider: ElementType
-    context: Context<PubSubTuple<unknown>>
+    context: Context<PubSubTuple<any>>
   }
 }
 
@@ -228,7 +228,7 @@ function createPublishProvider<T>(
 
     }, [stateValue])
 
-    return <TrebleHookContext.Provider {...props} value={contextState} />
+    return <TrebleHookContext.Provider children={props.children} value={contextState} />
 
   }
 
