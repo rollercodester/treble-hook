@@ -1,19 +1,20 @@
 {
   "name": "treble-hook",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Get hooked on simple subscribe-and-publish in ReactJS.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "keywords": [
     "pubsub",
-    "react",
-    "hooks",
-    "state management",
-    "context api",
-    "passing props",
-    "dispatch",
+    "recoil",
+    "react state management",
+    "redux",
     "subscribe",
-    "publish"
+    "publish",
+    "react hooks",
+    "context api",
+    "prop passing hell",
+    "dispatch"
   ],
   "repository": "https://github.com/igneous-systems/treble-hook",
   "author": "Ryan Howard <ryanhoward@igneoussystems.com>",

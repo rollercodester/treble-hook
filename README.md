@@ -74,7 +74,7 @@ export default function App() {
 
 ## Live Examples on Codesandbox
 
-- [Welcome](https://codesandbox.io/s/treble-hook-welcome-4ynvt) (Quick Start code)
+- [Welcome](https://codesandbox.io/s/create-react-app-ts-mui-treblehook-f2tpp) (Quick Start example with Typescript + Material-UI)
 - Classic ToDo App (coming soon)
 - Crack that Code Game (coming soon)
 
