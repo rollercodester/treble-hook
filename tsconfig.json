@@ -11,7 +11,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "noEmit": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "outDir": "lib",
@@ -24,6 +24,6 @@
     "target": "esnext",
   },
   "include": [
-    "src/index.ts",
+    "src/index.tsx",
   ],
 }

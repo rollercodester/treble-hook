@@ -1,9 +1,11 @@
 
 <div>
   <img height="180" alt='treble-hook' src='https://raw.githubusercontent.com/rollercodester/treble-hook/master/doc-assets/treble-hook-3.png'/>
-  <p>
-    <i>Super easy way to get "hooked" on subscribe-and-publish in React with no dependencies and no cruft.</i>
-  </p>
+    <h3>
+    <i>Simple, lightweight state management library for ReactJS with zero dependencies, weighing in at just under 900 bytes (gzip).</i>
+  </h3>
+  <br />
+  <h3 style={{ color: 'red' }}>IMPORTANT: Upgrading from v1 to v2 includes breaking changes; see API below for new interfaces.</h3>
   <br />
   <div style="float:left;">
     <a href="https://www.npmjs.com/package/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/v/treble-hook.svg?style=flat" alt="version"></a>
@@ -15,10 +17,9 @@
 
 <div style="float:none;">&nbsp;</div>
 
+<p></p>
 
-## Quick Start
-
-### Installation
+## Installation
 
 `yarn add treble-hook`
 
@@ -26,74 +27,164 @@ or
 
 `npm install --save treble-hook`
 
-### Usage
+## Quick Start
 
-Contrived sign-in component along with component that displays active user (signed-in user).
+```jsx
+import trebleHook, { usePubSub } from 'treble-hook'
 
-```tsx
-import React, { ChangeEvent, useState } from 'react'
-import { usePubSub } from 'treble-hook'
+// Welcome.jsx
+export default function Welcome() {
+  const [guestName] = usePubSub('guest')
 
-const ACTIVE_USER_TOPIC = 'active-user'
+  return (
+    <h3>Welcome to treble-hook, {guestName || ''}!</h3>
+  )
+}
 
-function SignIn() {
-
-  // publishUser will do just that, publish the value
-  // to all subscribers of the ACTIVE_USER_TOPIC
-  const [_, publishUser] = usePubSub<string>(ACTIVE_USER_TOPIC, '')
-  const [entered, setEntered] = useState<string>('')
+// GuestEntry.jsx
+export default function GuestEntry() {
+  const [, pubGuestName] = usePubSub('guest')
 
   return (
     <div>
       <input
-        type='text'
-        onChange={
-          (evt: ChangeEvent<HTMLInputElement>) => {
-            setEntered(evt.target.value)
-          }
-        }
+        type="text"
+        onChange={(e) => { pubGuestName(e.target.value) }}
       />
-      <button onClick={ () => { publishUser(entered) }}>Sign-in</button>
     </div>
   )
-
 }
 
-function ActiveUser() {
+// App.jsx
+export default function App() {
 
-  // this subsribes the component to the ACTIVE_USER_TOPIC and
-  // whenever the active user is published (from anywhere in the
-  // app) it will get updated here. Also, this component doesn't
-  // have to wait for the next publish, it will intialize with
-  // the last published value or default to 'Anonymous' otherwise
-  const [activeUser] = usePubSub<string>(
-    ACTIVE_USER_TOPIC,
-    'Anonymous'
+  trebleHook.addTopic('guest', '')
+
+  const GuestPublisher = trebleHook.getPublisher()
+
+  return (
+    <GuestPublisher>
+      <GuestEntry />
+      <br />
+      <Welcome />
+    </GuestPublisher>
   )
+}
+```
+
+## Live Examples on Codesandbox
+
+- [Welcome](https://codesandbox.io/s/create-react-app-ts-mui-treblehook-f2tpp) (Quick Start example with Typescript + Material-UI)
+- Classic ToDo App (coming soon)
+- Crack that Code Game (coming soon)
+
+# API
+
+## <ins>trebleHook.addTopic()<ins>
+
+Adds a new topic that can be published and subscribed to.
+
+```ts
+addTopic<T>(topicName: string, defaultValue: T, initWithSessionStorage = false): void
+```
+- `topicName` is the identifier for the topic and must be unique within the application.
+- `defaultValue` will be used as the initial state value for respective topic.
+- `initWithSessionStorage` determines whether to retrieve the topic's initial state from session storage. If `true`, then all subsequent published state changes will also be stored in sessions state for the app. This is helpful to ensure consistent state between any routes that require hard reloads.
+
+<ins>Example:</ins>
+
+```ts
+import trebleHook from 'treble-hook'
+
+trebleHook.addTopic<number>('apples', 25)
+trebleHook.addTopic<number>('organges', 42)
+trebleHook.addTopic<number>('carrots', 100)
+```
+
+## <ins>trebleHook.getPublisher()</ins>
+
+Returns a TrebleHookPublisher JSX element that manages publications for given topics. The Publisher JSX should be placed high in the component tree (ancestral to all components that interact with the respective publisher state).
+
+```ts
+getPublisher(topics?: string[]): TrebleHookPublisher (JSX.Element)
+```
+- `topics` is the array of topic names contextual to this publisher that have been added using the `addTopic` method. If no topics are passed in then all topics will be included in the returned publisher.
+
+<ins>Example:</ins>
+
+```tsx
+import React from 'react'
+import trebleHook from 'treble-hook'
+
+const FruitCountPublisher = trebleHook.getPublisher(['apples', 'oranges'])
+
+return (
+  <App>
+    <FruitCountPublisher>
+      <FruitStand />
+    </FruitCountPublisher>
+  </App>
+)
+```
+
+## <ins>usePubSub</ins>
+
+A React hook that subscribes a component to a topic. The hook returns a tuple that is similar to the tuple returned from `useState` where the first element is the topic's current state value and the second element is the method to publish a new state value for the topic.
+
+```ts
+usePubSub<T>(topic: string): PubSubTuple<T>
+```
+- `topic` is the unique topic name to subscribe to.
+
+<ins>Example:</ins>
+
+```tsx
+import React from 'react'
+import { usePubSub } from 'treble-hook'
+
+function FruitTable() {
+  const [apples] = usePubSub<number>('apples')
+  const [oranges] = usePubSub<number>('oranges')
 
   return (
     <div>
-      Active user: { activeUser }
+      <h3>Apple count: {apples}</h3>
+      <h3>Orange count: {oranges}</h3>
     </div>
   )
-
 }
 
+function FruitVendor() {
+  const [apples, pubApples] = usePubSub<number>('apples')
+  const [oranges, pubOranges] = usePubSub<number>('oranges')
+
+  return (
+    <div>
+      <button
+        disabled={apples === 0}
+        onClick={() => {
+          pubApples(apples - 1)
+        }}
+      >
+        Sell an apple
+      </button>
+      <button
+        disabled={oranges === 0}
+        onClick={() => {
+          pubOranges(oranges - 1)
+        }}
+      >
+        Sell an orange
+      </button>
+    </div>
+  )
+}
+
+function FruitStand() {
+  <FruitTable />
+  <FruitVendor />
+}
 ```
-
-## Documentation
-
-### See the [Treble-Hook Wiki](https://github.com/igneous-systems/treble-hook/wiki) for API documentation and more.
-
-## Live Codesandbox Examples
-
-* [Sign-in README example](https://codesandbox.io/s/treble-hook-sign-in-example-ftsbx)
-* [Crack That Code! game](https://codesandbox.io/s/treble-hook-presents-crack-that-code-vxcx1)
-
-
-## Authors
-
-Brought to you by the engineering team at [Igneous](https://www.igneous.io). Speaking of, we're always on the lookout for fun-loving, passionate engineers; visit [Igneous culture and careers](https://www.igneous.io/culture-and-careers) to learn more.
 
 ## Liscense
 

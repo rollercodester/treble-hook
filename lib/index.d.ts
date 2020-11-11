@@ -1,29 +1,15 @@
-/*!*
- * Copyright (c) Igneous, Inc. All Rights Reserved.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+import React, { Dispatch, SetStateAction } from 'react';
+declare const _default: {
+    addTopic<T>(topicName: string, defaultValue: T, initWithSessionStorage?: boolean): void;
+    getPublisher(topics?: string[] | undefined): React.FunctionComponent<{
+        children?: React.ReactNode;
+    }>;
+};
+export default _default;
+export declare function usePubSub<T>(topic: string): [T, React.Dispatch<React.SetStateAction<T>>];
+export declare type Publish<T> = Dispatch<SetStateAction<T>>;
+export declare type PubSubTuple<T> = [T, Publish<T>];
 export declare enum PubSubTupleIndex {
     State = 0,
-    Publish = 1,
-    Unsubscribe = 2,
-    DeleteTopic = 3
+    Publish = 1
 }
-export declare type Publish<T> = (newState: T) => void;
-export interface TrebleHookConfig {
-    suppressDupeStateWarning?: boolean;
-    topicConfig?: TopicConfigMap;
-}
-export interface TopicConfig {
-    allowDupeState?: boolean;
-}
-export interface TopicConfigMap {
-    [topic: string]: TopicConfig;
-}
-export declare function configPubSub(config: TrebleHookConfig): void;
-export declare function usePubSub<T>(topic: string, defaultState: T, publishDefaultState?: boolean): SubscriptionTuple<T>;
-declare type PublicUnsubscribe = () => void;
-declare type PublicDeleteTopic = () => void;
-declare type SubscriptionTuple<T> = [T, Publish<T>, PublicUnsubscribe, PublicDeleteTopic];
-export {};

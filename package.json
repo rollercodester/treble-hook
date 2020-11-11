@@ -1,29 +1,31 @@
 {
   "name": "treble-hook",
-  "version": "1.0.13",
+  "version": "2.0.3",
   "description": "Get hooked on simple subscribe-and-publish in ReactJS.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "keywords": [
     "pubsub",
-    "react",
-    "hooks",
-    "state management",
-    "context api",
-    "passing props",
-    "dispatch",
+    "recoil",
+    "react state management",
+    "redux",
     "subscribe",
-    "publish"
+    "publish",
+    "react hooks",
+    "context api",
+    "prop passing hell",
+    "dispatch"
   ],
   "repository": "https://github.com/igneous-systems/treble-hook",
   "author": "Ryan Howard <ryanhoward@igneoussystems.com>",
   "license": "MIT",
   "scripts": {
     "build": "yarn lint && tsc",
-    "lint": "tslint -c ./tslint.json ./src/**/*.ts",
+    "lint": "tslint -c ./tslint.json ./src/**/*.tsx",
+    "publishNext": "yarn publish --tag next",
     "prepublishOnly": "yarn test",
     "pretest": "yarn build",
-    "test": "yarn jest"
+    "test": "yarn jest --passWithNoTests"
   },
   "files": [
     "lib"
