@@ -2,10 +2,8 @@
 <div>
   <img height="180" alt='treble-hook' src='https://raw.githubusercontent.com/rollercodester/treble-hook/master/doc-assets/treble-hook-3.png'/>
     <h3>
-    <i>Simple, lightweight state management library for ReactJS with zero dependencies, weighing in at just under 900 bytes (gzip).</i>
+    <i>Simple, lightweight state management library for ReactJS with zero dependencies, weighing in at <a href="https://bundlephobia.com/result?p=treble-hook@latest">just under 900 bytes (gzip)</a>.</i>
   </h3>
-  <br />
-  <h3 style={{ color: 'red' }}>IMPORTANT: Upgrading from v1 to v2 includes breaking changes; see API below for new interfaces.</h3>
   <br />
   <div style="float:left;">
     <a href="https://www.npmjs.com/package/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/v/treble-hook.svg?style=flat" alt="version"></a>
@@ -17,9 +15,14 @@
 
 <div style="float:none;">&nbsp;</div>
 
-<p></p>
+<br/>
 
-## Installation
+```diff
+- IMPORTANT: Upgrading from v1 to v2 includes breaking changes; see API below for new interfaces.
+```
+<br/>
+
+# Installation
 
 `yarn add treble-hook`
 
@@ -27,7 +30,9 @@ or
 
 `npm install --save treble-hook`
 
-## Quick Start
+<br/>
+
+# Quick Start
 
 ```jsx
 import trebleHook, { usePubSub } from 'treble-hook'
@@ -72,11 +77,15 @@ export default function App() {
 }
 ```
 
-## Live Examples on Codesandbox
+<br/>
+
+# Live Examples on Codesandbox
 
 - [Welcome](https://codesandbox.io/s/create-react-app-ts-mui-treblehook-f2tpp) (Quick Start example with Typescript + Material-UI)
-- Classic ToDo App (coming soon)
-- Crack that Code Game (coming soon)
+- [Classic ToDo App](https://codesandbox.io/s/treble-hook-todos-y7fr0)
+- Code Cracker Game (coming soon)
+
+<br/>
 
 # API
 
@@ -96,10 +105,12 @@ addTopic<T>(topicName: string, defaultValue: T, initWithSessionStorage = false):
 ```ts
 import trebleHook from 'treble-hook'
 
-trebleHook.addTopic<number>('apples', 25)
-trebleHook.addTopic<number>('organges', 42)
-trebleHook.addTopic<number>('carrots', 100)
+trebleHook.addTopic('apples', 25)
+trebleHook.addTopic('organges', 42)
+trebleHook.addTopic('carrots', 100)
 ```
+
+<br/>
 
 ## <ins>trebleHook.getPublisher()</ins>
 
@@ -119,13 +130,13 @@ import trebleHook from 'treble-hook'
 const FruitCountPublisher = trebleHook.getPublisher(['apples', 'oranges'])
 
 return (
-  <App>
-    <FruitCountPublisher>
-      <FruitStand />
-    </FruitCountPublisher>
-  </App>
+  <FruitCountPublisher>
+    <FruitStand />
+  </FruitCountPublisher>
 )
 ```
+
+<br/>
 
 ## <ins>usePubSub</ins>
 
@@ -186,6 +197,8 @@ function FruitStand() {
 }
 ```
 
-## Liscense
+<br/>
+
+# Liscense
 
 ### MIT
