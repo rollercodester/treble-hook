@@ -7,9 +7,9 @@
   <br />
   <div style="float:left;">
     <a href="https://www.npmjs.com/package/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/v/treble-hook.svg?style=flat" alt="version"></a>
-    <img src="https://img.shields.io/travis/igneous-systems/treble-hook.svg?branch=master&style=flat" alt="Build Status">
+    <img src="https://img.shields.io/travis/rollercodester/treble-hook.svg?branch=master&style=flat" alt="Build Status">
     <a href="http://www.npmtrends.com/treble-hook" rel="nofollow"><img src="https://img.shields.io/npm/dm/treble-hook.svg?style=flat" alt="downloads"></a>
-    <a href="https://github.com/igneous-systems/treble-hook/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/npm/l/treble-hook.svg?style=flat" alt="MIT License"></a>
+    <a href="https://github.com/rollercodester/treble-hook/blob/master/LICENSE" rel="nofollow"><img src="https://img.shields.io/npm/l/treble-hook.svg?style=flat" alt="MIT License"></a>
   </div>
 </div>
 
@@ -81,7 +81,7 @@ export default function App() {
 
 # Live Examples on Codesandbox
 
-- [Welcome](https://codesandbox.io/s/create-react-app-ts-mui-treblehook-f2tpp) (Quick Start example with Typescript + Material-UI)
+- [Welcome](https://codesandbox.io/s/treble-hook-quick-start-z2m7r) (Quick Start example with Typescript + Material-UI)
 - [Classic ToDo App](https://codesandbox.io/s/treble-hook-todos-y7fr0)
 - Code Cracker Game (coming soon)
 

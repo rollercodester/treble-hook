@@ -1,6 +1,6 @@
 {
   "name": "treble-hook",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "Get hooked on simple subscribe-and-publish in ReactJS.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -16,7 +16,7 @@
     "prop passing hell",
     "dispatch"
   ],
-  "repository": "https://github.com/igneous-systems/treble-hook",
+  "repository": "https://github.com/rollercodoester/treble-hook",
   "author": "Ryan Howard <rollercodester@live.com>",
   "license": "MIT",
   "scripts": {
